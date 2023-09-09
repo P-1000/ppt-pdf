@@ -1,7 +1,7 @@
 {
   "name": "ppt-pdf",
   "type": "module",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "description": "Converts ppt, doc, and office files to .pdf",
   "main": "index.js",
   "scripts": {
