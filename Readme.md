@@ -1,9 +1,6 @@
 ```markdown
 # Office File to PDF Converter PPT-PDF
 
-<!-- ![npm version](https://img.shields.io/npm/v/your-package-name.svg)
-![npm downloads](https://img.shields.io/npm/dt/your-package-name.svg)
-[![License](https://img.shields.io/npm/l/your-package-name.svg)](LICENSE) -->
 
 Convert Office files (e.g., doc, docx, ppt, pptx) to PDF format with customizable output subdirectories.
 
@@ -61,8 +58,8 @@ This package is provided under the [MIT License](LICENSE).
 
 ## Author
 
-- Pavan
-- Email: contact@pavankumar.social
+- # Pavan
+- # Email: contact@pavankumar.social
 
 ## Contributions
 
@@ -73,3 +70,6 @@ Contributions are welcome! If you have suggestions or improvements, please feel 
 # ppt-pdf
 # ppt-pdf
 # ppt-pdf
+# Convert Office files (e.g., doc, docx, ppt, pptx) to PDF format with customizable output subdirectories.
+# file to pdf 
+# file extension to pdf
