@@ -4,67 +4,57 @@ import path from 'path';
 import libre from 'libreoffice-convert';
 import figlet from 'figlet';
 import chalk from 'chalk';
+import os from 'os';
 
-
-function ensureDirectoryExists(directory) { // to ensure o/p dir exists
-  if (!fs.existsSync(directory)) {
-    fs.mkdirSync(directory, { recursive: true });
-  }
-}
-
-
+// Function to convert an Office file (e.g., doc, docx, ppt, pptx) to PDF
 function convertOfficeToPdf(inputFile, outputDirectory) {
   const baseName = path.basename(inputFile, path.extname(inputFile));
   const outputPdfFile = path.join(outputDirectory, `${baseName}.pdf`);
+  const tmpDir = os.tmpdir(); // Get the system's temporary directory
 
   let officeFileBuffer = fs.readFileSync(inputFile);
 
   libre.convert(officeFileBuffer, '.pdf', undefined, (err, pdfBuffer) => {
     if (err) {
-      console.error(chalk.red(`Error converting file ${inputFile}: ${err}`));
+      console.log(`Error converting file ${inputFile}: ${err}`);
     } else {
-      ensureDirectoryExists(outputDirectory); // Ensure output directory exists
       fs.writeFileSync(outputPdfFile, pdfBuffer);
-      console.log(chalk.green.bold(`File converted successfully: ${inputFile} -> ${outputPdfFile}`));
+      console.log(`File converted successfully: ${inputFile} -> ${outputPdfFile}`);
     }
   });
 }
 
-
+// Process command-line arguments
 if (process.argv.length !== 4) {
-  console.error(chalk.red('Usage: node convert.js input-folder output-subdirectory'));
+  console.error('Usage: node index.js input-folder output-subdirectory');
   process.exit(1);
 }
 
 const inputFolder = process.argv[2];
 const outputSubdirectory = process.argv[3];
 
-
+// Define the full output directory path
 const outputDirectory = path.join('output', outputSubdirectory);
 
+// Create the output directory if it doesn't exist
+if (!fs.existsSync(outputDirectory)) {
+  fs.mkdirSync(outputDirectory, { recursive: true });
+}
 
-figlet('PPT-PDF', (err, data) => {
+// Read all files in the input directory and convert Office files to PDF
+fs.readdir(inputFolder, (err, files) => {
   if (err) {
-    console.error(chalk.red('Error creating banner:', err));
-  } else {
-    console.log(chalk.blue(data));
+    console.error(`Error reading input folder: ${err}`);
+    process.exit(1);
   }
 
+  files.forEach((file) => {
+    const inputFile = path.join(inputFolder, file);
+    const fileExtension = path.extname(file).toLowerCase();
 
-  fs.readdir(inputFolder, (err, files) => {
-    if (err) {
-      console.error(chalk.red(`Error reading input folder: ${err}`));
-      process.exit(1);
+    // Check for supported Office file extensions and exclude PDFs
+    if (['.doc', '.docx', '.ppt', '.pptx'].includes(fileExtension) && fileExtension !== '.pdf') {
+      convertOfficeToPdf(inputFile, outputDirectory);
     }
-
-    files.forEach((file) => {
-      const inputFile = path.join(inputFolder, file);
-      const fileExtension = path.extname(file).toLowerCase();
-
-
-      if (['.doc', '.docx', '.ppt', '.pptx'].includes(fileExtension) && fileExtension !== '.pdf') {
-        convertOfficeToPdf(inputFile, outputDirectory);
-      }
-    });
   });
 });
